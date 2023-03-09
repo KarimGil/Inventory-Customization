@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="inherit_res_company" model="ir.ui.view">
+        <field name="name">Res Company</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <field name="currency_id" position="after">
+                <field name="lang"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="stock_picking_type_kanban_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.type.kanban.inherit</field>
+        <field name="model">stock.picking.type</field>
+        <field name="inherit_id" ref="stock.stock_picking_type_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='stock_picking']" position="attributes">
+                <attribute name="t-if">['incoming', 'outgoing', 'internal', 'return'].indexOf(record.code.raw_value)
+                    &gt;
+                    -1
+                </attribute>
+            </xpath>
+            <xpath expr="//button[@name='get_action_picking_tree_ready']" position="inside">
+                <span t-if="record.code.raw_value =='return'"><t t-esc="record.count_picking_ready.value"/> To Process</span>
+            </xpath>
+        </field>
+    </record>
+</odoo>
